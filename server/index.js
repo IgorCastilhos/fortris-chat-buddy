@@ -10,7 +10,7 @@ app.use(express.json());
 
 app.post('/api/chat', async (req, res) => {
   try {
-    const { message, model = 'llama2' } = req.body;
+    const { message, model = 'llama3.2' } = req.body;
 
     console.log(`[${new Date().toISOString()}] Received chat request for model: ${model}`);
 
