@@ -4,36 +4,7 @@ A modern web application featuring a Fortris-inspired landing page with an integ
 
 ## 🏗️ Architecture
 
-```mermaid
-graph TB
-    subgraph "Frontend - React"
-        A[User Browser] --> B[React App :5173]
-        B --> C[Navbar Component]
-        B --> D[Hero Component]
-        B --> E[ChatWidget Component]
-    end
-    
-    subgraph "Backend - Node.js"
-        F[Express Server :3001]
-        F --> G[/api/chat endpoint]
-        F --> H[/api/health endpoint]
-    end
-    
-    subgraph "AI Layer"
-        I[Ollama :11434]
-        I --> J[llama2 Model]
-    end
-    
-    E -->|HTTP POST| G
-    G -->|Generate Request| I
-    I -->|AI Response| G
-    G -->|JSON Response| E
-    
-    style A fill:#ff7a6b
-    style B fill:#1f2937
-    style F fill:#1f2937
-    style I fill:#4f46e5
-```
+[![](https://mermaid.ink/img/pako:eNp9kttymzAQhl9Fo2ubgAU-6CIzxnFsZ1o7EzvTmUIuFLMxtCBRIXKo7XfvAnWnxGl1w2r3-7X_Cu3pVkVAOd1pkcdk44eS4CrKxyZxrZU0IKMgpKeQdMkdiK0J6UMDV2sc3Begia_VC34fSLd7SXwU1SQZ5znhnjNgLY1fU5NgKZ4fhSYTleVKgjRnyFUwB63-A0yDSSzMlyTagTnD0HITvBvNF9vvzWS_IxxsiZdhfStaNq-RmL7mGoqCrEE_45ic2bbThmofM0QvRJ5cbNFO1ThXiTQfgPMTGINITXyO_sv0eIHK8YJ8Em-gWwdXhVWaikwQ7jguc9vVuu1NUAPM6pHPOGn6cbNpxR7mm80tuV2tNwcya_KzOj8DCVoYwEfwo4TCHMiiKdctDujtDgr8AQW8E96sV8u_atNTy1DSDj6_JKLc6BI6NAOdiWpL9xUTUhNDBiHlGEbwJMoU7ymUR5TlQn5VKjsptSp3MeVPIi1wV-YR-rxKBF5d9iercVrQE1VKQzljXn0I5Xv6SvnQtZjDHKc_Yrbnun0svlHe9yzb85jTZ0O75w76vWOH_qy72tbQGTn2qC54PXs4OP4CJ6D37Q?type=png)](https://mermaid.live/edit#pako:eNp9kttymzAQhl9Fo2ubgAU-6CIzxnFsZ1o7EzvTmUIuFLMxtCBRIXKo7XfvAnWnxGl1w2r3-7X_Cu3pVkVAOd1pkcdk44eS4CrKxyZxrZU0IKMgpKeQdMkdiK0J6UMDV2sc3Begia_VC34fSLd7SXwU1SQZ5znhnjNgLY1fU5NgKZ4fhSYTleVKgjRnyFUwB63-A0yDSSzMlyTagTnD0HITvBvNF9vvzWS_IxxsiZdhfStaNq-RmL7mGoqCrEE_45ic2bbThmofM0QvRJ5cbNFO1ThXiTQfgPMTGINITXyO_sv0eIHK8YJ8Em-gWwdXhVWaikwQ7jguc9vVuu1NUAPM6pHPOGn6cbNpxR7mm80tuV2tNwcya_KzOj8DCVoYwEfwo4TCHMiiKdctDujtDgr8AQW8E96sV8u_atNTy1DSDj6_JKLc6BI6NAOdiWpL9xUTUhNDBiHlGEbwJMoU7ymUR5TlQn5VKjsptSp3MeVPIi1wV-YR-rxKBF5d9iercVrQE1VKQzljXn0I5Xv6SvnQtZjDHKc_Yrbnun0svlHe9yzb85jTZ0O75w76vWOH_qy72tbQGTn2qC54PXs4OP4CJ6D37Q)
 
 ## 📋 System Requirements
 
@@ -56,7 +27,7 @@ curl -fsSL https://ollama.com/install.sh | sh
 ### 2. Pull the AI Model
 
 ```bash
-ollama pull llama2
+ollama pull llama3.2
 ```
 
 ### 3. Start Ollama Service
@@ -122,7 +93,7 @@ Send a message to the Ollama chatbot.
 ```json
 {
   "message": "Hello, how are you?",
-  "model": "llama2"
+  "model": "llama3.2"
 }
 ```
 
@@ -173,7 +144,7 @@ Check backend server health status.
 
 ```bash
 curl http://localhost:11434/api/generate -d '{
-  "model": "llama2",
+  "model": "llama3.2",
   "prompt": "Hello, test message",
   "stream": false
 }'
@@ -186,7 +157,7 @@ curl http://localhost:3001/api/health
 
 curl -X POST http://localhost:3001/api/chat \
   -H "Content-Type: application/json" \
-  -d '{"message": "Hello", "model": "llama2"}'
+  -d '{"message": "Hello", "model": "llama3.2"}'
 ```
 
 ## 🔒 Security Considerations
@@ -264,7 +235,7 @@ ollama serve
 
 **Solution**:
 ```bash
-ollama pull llama2
+ollama pull llama3.2
 ollama list  # Verify model is installed
 ```
 

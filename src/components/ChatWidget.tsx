@@ -44,7 +44,7 @@ const ChatWidget = () => {
         },
         body: JSON.stringify({ 
           message: input,
-          model: "llama2"
+          model: "llama3.2"
         }),
       });
 
