@@ -1,304 +1,80 @@
-# Fortris Chatbot Application
+Checklist de Design de Classes Java
+1. Propósito e Responsabilidade
+A primeira pergunta, antes de qualquer linha de código: qual é a única razão para esta classe mudar? Se você consegue listar duas, ela já está fazendo coisas demais (SRP).
 
-A modern web application featuring a Fortris-inspired landing page with an integrated Ollama-powered AI chatbot.
+Esta classe representa um conceito do domínio, uma operação, ou só um saco de dados?
+O nome descreve uma responsabilidade clara, ou é genérico (Manager, Helper, Util, Processor)? Nomes vagos quase sempre escondem baixa coesão.
+Se eu descrevesse esta classe em uma frase, precisaria usar "e"?
 
-## 🏗️ Architecture
+2. Imutabilidade e Estado
+Por padrão, prefira imutabilidade. Mutabilidade é uma decisão que você justifica, não o ponto de partida.
 
-[![](https://mermaid.ink/img/pako:eNp9kttymzAQhl9Fo2ubgAU-6CIzxnFsZ1o7EzvTmUIuFLMxtCBRIXKo7XfvAnWnxGl1w2r3-7X_Cu3pVkVAOd1pkcdk44eS4CrKxyZxrZU0IKMgpKeQdMkdiK0J6UMDV2sc3Begia_VC34fSLd7SXwU1SQZ5znhnjNgLY1fU5NgKZ4fhSYTleVKgjRnyFUwB63-A0yDSSzMlyTagTnD0HITvBvNF9vvzWS_IxxsiZdhfStaNq-RmL7mGoqCrEE_45ic2bbThmofM0QvRJ5cbNFO1ThXiTQfgPMTGINITXyO_sv0eIHK8YJ8Em-gWwdXhVWaikwQ7jguc9vVuu1NUAPM6pHPOGn6cbNpxR7mm80tuV2tNwcya_KzOj8DCVoYwEfwo4TCHMiiKdctDujtDgr8AQW8E96sV8u_atNTy1DSDj6_JKLc6BI6NAOdiWpL9xUTUhNDBiHlGEbwJMoU7ymUR5TlQn5VKjsptSp3MeVPIi1wV-YR-rxKBF5d9iercVrQE1VKQzljXn0I5Xv6SvnQtZjDHKc_Yrbnun0svlHe9yzb85jTZ0O75w76vWOH_qy72tbQGTn2qC54PXs4OP4CJ6D37Q?type=png)](https://mermaid.live/edit#pako:eNp9kttymzAQhl9Fo2ubgAU-6CIzxnFsZ1o7EzvTmUIuFLMxtCBRIXKo7XfvAnWnxGl1w2r3-7X_Cu3pVkVAOd1pkcdk44eS4CrKxyZxrZU0IKMgpKeQdMkdiK0J6UMDV2sc3Begia_VC34fSLd7SXwU1SQZ5znhnjNgLY1fU5NgKZ4fhSYTleVKgjRnyFUwB63-A0yDSSzMlyTagTnD0HITvBvNF9vvzWS_IxxsiZdhfStaNq-RmL7mGoqCrEE_45ic2bbThmofM0QvRJ5cbNFO1ThXiTQfgPMTGINITXyO_sv0eIHK8YJ8Em-gWwdXhVWaikwQ7jguc9vVuu1NUAPM6pHPOGn6cbNpxR7mm80tuV2tNwcya_KzOj8DCVoYwEfwo4TCHMiiKdctDujtDgr8AQW8E96sV8u_atNTy1DSDj6_JKLc6BI6NAOdiWpL9xUTUhNDBiHlGEbwJMoU7ymUR5TlQn5VKjsptSp3MeVPIi1wV-YR-rxKBF5d9iercVrQE1VKQzljXn0I5Xv6SvnQtZjDHKc_Yrbnun0svlHe9yzb85jTZ0O75w76vWOH_qy72tbQGTn2qC54PXs4OP4CJ6D37Q)
+Os campos podem ser final?
+Se é um agregado de dados imutável, deveria ser um record? (Java 17/21 — elimina boilerplate de equals/hashCode/toString/getters)
+O estado é sempre válido após a construção? (validação no construtor → nunca existe instância em estado inválido)
+Estou expondo coleções ou objetos mutáveis internos? Se sim, faço defensive copy na entrada e na saída?
 
-## 🎥 Demo
-
-https://github.com/user-attachments/assets/b5a5a880-c350-46cc-845c-7014727908d2
-
-## 📋 System Requirements
-
-- **Node.js** 18+ (for both frontend and backend)
-- **Ollama** (for AI model)
-- **npm** or **yarn** package manager
-
-## 🚀 Quick Start
-
-### 1. Install Ollama
-
-```bash
-# macOS/Linux
-curl -fsSL https://ollama.com/install.sh | sh
-
-# Windows
-# Download from https://ollama.com/download
-```
-
-### 2. Pull the AI Model
-
-```bash
-ollama pull llama3.2
-```
-
-### 3. Start Ollama Service
-
-```bash
-# Set CORS to allow browser requests
-export OLLAMA_ORIGINS="*"
-ollama serve
-```
-
-**Note**: Ollama will run on `http://localhost:11434`
-
-### 4. Install and Run Backend Server
-
-```bash
-cd server
-npm install
-npm start
-```
-
-The backend will run on `http://localhost:3001`
-
-### 5. Install and Run Frontend
-
-```bash
-# In the project root directory
-npm install
-npm run dev
-```
-
-The frontend will run on `http://localhost:5173`
-
-## 🔧 Configuration
-
-### Backend Configuration
-
-Edit `server/index.js` to customize:
-
-```javascript
-const PORT = 3001;              // Backend server port
-const OLLAMA_URL = 'http://localhost:11434';  // Ollama API endpoint
-```
-
-### Frontend Configuration
-
-The ChatWidget connects to the backend at `http://localhost:3001/api/chat`. To change this, edit `src/components/ChatWidget.tsx`:
-
-```typescript
-const response = await fetch("http://localhost:3001/api/chat", {
-  // ...
-});
-```
-
-## 📡 API Documentation
-
-### Backend Endpoints
-
-#### POST /api/chat
-
-Send a message to the Ollama chatbot.
-
-**Request:**
-```json
-{
-  "message": "Hello, how are you?",
-  "model": "llama3.2"
+javapublic record Money(BigDecimal amount, Currency currency) {
+    public Money {
+        Objects.requireNonNull(amount, "amount");
+        Objects.requireNonNull(currency, "currency");
+        if (amount.scale() > currency.getDefaultFractionDigits())
+            throw new IllegalArgumentException("scale inválida para " + currency);
+    }
 }
-```
+3. Encapsulamento
 
-**Response:**
-```json
-{
-  "response": "I'm doing well, thank you for asking! How can I help you today?"
-}
-```
+Campos são private? Exponho comportamento, não estado.
+Estou caindo na armadilha do "anemic domain model" — getters/setters para tudo e a lógica vazando para services? Em DDD, a lógica de negócio pertence à entidade.
+A API pública é a menor possível? Tudo que não precisa ser público é private/package-private.
+Métodos public que não fazem parte do contrato real deveriam estar lá?
 
-**Error Responses:**
-- `503`: Ollama service unavailable
-- `500`: Internal server error
+4. Construção
 
-#### GET /api/health
+O construtor garante invariantes ou aceita um objeto "meio construído"?
+Tem muitos parâmetros (>3-4) ou vários do mesmo tipo? Considere Builder ou agrupar em value objects.
+Dependências chegam por injeção (construtor) ou são instanciadas internamente? Dependa de abstrações — facilita teste e respeita DIP.
+Construtor faz trabalho pesado (I/O, queries)? Construtor deve construir, não executar.
 
-Check backend server health status.
+5. Igualdade, Hashing e Identidade
+Esta é a fonte de bugs mais silenciosa em Java.
 
-**Response:**
-```json
-{
-  "status": "ok",
-  "timestamp": "2025-10-16T12:00:00.000Z"
-}
-```
+A classe tem identidade (entidade — igualdade por ID) ou é um value object (igualdade por valor)? São contratos opostos.
+Se sobrescrevi equals, sobrescrevi hashCode? (e vice-versa)
+Vou usar instâncias como chave de Map ou em Set? Então equals/hashCode precisam estar corretos e baseados em campos imutáveis.
+record resolve isso de graça para value objects.
 
-## 🎨 Frontend Components
+6. Herança vs. Composição
 
-### Navbar
-- Fortris logo and branding
-- Navigation links (Platform, Industry, Solutions, Resources, Company)
-- "Book a demo" CTA button
+Prefira composição. Pergunte: "X é um Y, sempre, em todos os contextos?" Se há dúvida, é composição.
+Se permito herança, a classe foi projetada para isso (documentei o contrato dos métodos protegidos)? Senão, marque final.
+Subclasses respeitam Liskov — não enfraquecem pré-condições nem violam invariantes da base?
+sealed (Java 17) é uma alternativa melhor quando você quer um conjunto fechado e conhecido de subtipos.
 
-### Hero
-- Main headline and value proposition
-- Dashboard mockup with analytics
-- Feature highlights
+7. Tratamento de Erros
 
-### ChatWidget
-- Floating chat button in bottom-right corner
-- Expandable chat interface
-- Message history with user/assistant roles
-- Loading states and error handling
+Valido entradas na fronteira (argumentos do construtor e métodos públicos)?
+Uso exceções específicas, não RuntimeException genérica?
+Retorno Optional para "ausência legítima" em vez de null? (nunca Optional em campos ou parâmetros)
+Lanço exceção checked só quando o chamador pode realmente recuperar?
 
-## 🧪 Testing
+8. Thread-Safety
+Uma decisão consciente, mesmo que a resposta seja "não é thread-safe".
 
-### Test Ollama Connection
+Esta classe será compartilhada entre threads?
+Imutável → thread-safe de graça (o melhor caminho).
+Se há estado mutável compartilhado, como protejo? A política de sincronização está documentada?
 
-```bash
-curl http://localhost:11434/api/generate -d '{
-  "model": "llama3.2",
-  "prompt": "Hello, test message",
-  "stream": false
-}'
-```
+9. Testabilidade
+Se é difícil testar, o design está ruim — o teste é o sintoma, não o problema.
 
-### Test Backend Server
+Consigo instanciar e testar sem subir Spring context inteiro, banco, ou Kafka?
+Dependências são mockáveis (interfaces injetadas)?
+Há lógica em métodos static/private complexos que não consigo testar isoladamente?
+Efeitos colaterais estão isolados das regras de negócio puras?
 
-```bash
-curl http://localhost:3001/api/health
+10. Coesão e Acoplamento
 
-curl -X POST http://localhost:3001/api/chat \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Hello", "model": "llama3.2"}'
-```
-
-## 🔒 Security Considerations
-
-### Development
-- CORS is enabled for all origins (`*`) for development convenience
-- Backend runs on localhost without authentication
-
-### Production Recommendations
-1. **Restrict CORS**: Update Express CORS configuration to allow only specific origins
-2. **Add Authentication**: Implement JWT or API key authentication
-3. **Rate Limiting**: Add rate limiting to prevent abuse
-4. **Environment Variables**: Use `.env` files for configuration
-5. **HTTPS**: Deploy with SSL/TLS certificates
-6. **Input Validation**: Sanitize and validate all user inputs
-7. **Logging**: Implement proper logging and monitoring
-
-## 🛠️ Technology Stack
-
-### Frontend
-- **React 18.3** - UI framework
-- **TypeScript** - Type safety
-- **Vite** - Build tool
-- **Tailwind CSS** - Styling
-- **Lucide React** - Icons
-
-### Backend
-- **Node.js** - Runtime
-- **Express** - Web framework
-- **CORS** - Cross-origin support
-- **node-fetch** - HTTP client
-
-### AI
-- **Ollama** - Local AI runtime
-- **Llama 2** - Language model
-
-## 📁 Project Structure
-
-```
-fortris-chatbot/
-├── server/
-│   ├── index.js           # Backend Express server
-│   └── package.json       # Backend dependencies
-├── src/
-│   ├── components/
-│   │   ├── Navbar.tsx     # Navigation component
-│   │   ├── Hero.tsx       # Hero section
-│   │   └── ChatWidget.tsx # Chatbot interface
-│   ├── pages/
-│   │   └── Index.tsx      # Main page
-│   ├── index.css          # Design system
-│   └── main.tsx           # App entry point
-├── public/                # Static assets
-├── README.md              # This file
-└── package.json           # Frontend dependencies
-```
-
-## 🐛 Troubleshooting
-
-### Ollama Not Running
-**Error**: "Cannot connect to Ollama"
-
-**Solution**:
-```bash
-# Check if Ollama is running
-curl http://localhost:11434
-
-# If not, start it
-export OLLAMA_ORIGINS="*"
-ollama serve
-```
-
-### Model Not Found
-**Error**: "Model not found"
-
-**Solution**:
-```bash
-ollama pull llama3.2
-ollama list  # Verify model is installed
-```
-
-### CORS Errors
-**Error**: "CORS policy blocked"
-
-**Solution**: Make sure Ollama is started with CORS enabled:
-```bash
-export OLLAMA_ORIGINS="*"
-ollama serve
-```
-
-### Backend Connection Failed
-**Error**: "Failed to fetch"
-
-**Solution**:
-1. Verify backend is running: `curl http://localhost:3001/api/health`
-2. Check that port 3001 is not in use
-3. Restart the backend server
-
-## 🚀 Deployment
-
-### Backend Deployment Options
-- **Railway.app** - Easy Node.js deployment
-- **Render.com** - Free tier available
-- **DigitalOcean App Platform** - Scalable hosting
-- **AWS EC2** - Full control
-
-### Frontend Deployment Options
-- **Vercel** - Optimized for React/Vite
-- **Netlify** - Simple static hosting
-- **Cloudflare Pages** - Global CDN
-- **GitHub Pages** - Free hosting
-
-### Important Notes
-- Ollama requires a server with GPU for optimal performance
-- Consider using cloud AI APIs (OpenAI, Anthropic) for production instead of self-hosted Ollama
-- Update API URLs in production builds
-
-## 📝 License
-
-MIT License - feel free to use this project for your own purposes.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a pull request
-
-## 📞 Support
-
-For issues or questions:
-- Open a GitHub issue
-- Check the troubleshooting section
-- Review Ollama documentation: https://ollama.com/docs
-
----
-
-Built with ❤️ using React, Node.js, and Ollama
+Os métodos operam sobre o mesmo conjunto de campos? (alta coesão) Ou tenho grupos de métodos que usam campos diferentes — sinal de duas classes disfarçadas?
+A classe conhece detalhes demais de outras (a.getB().getC().doSomething() — violação de Lei de Demeter)?
+Depende de tipos concretos onde uma interface bastaria?
